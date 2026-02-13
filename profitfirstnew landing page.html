@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Profit First Analytics</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: #000000;
+      color: #ffffff;
+    }
+
+    /* Header/Navigation */
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: rgba(0, 0, 0, 0.9);
+      backdrop-filter: blur(10px);
+      padding: 16px 24px;
+      z-index: 1000;
+      border-bottom: none;
+    }
+
+    .header-content {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      height: 32px;
+      width: auto;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      align-items: center;
+    }
+
+    .nav-links a {
+      color: #ffffff;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+
+    .nav-links a:hover {
+      color: #13ef96;
+    }
+
+    /* Mobile Menu */
+    .mobile-menu-toggle {
+      display: none;
+      flex-direction: column;
+      cursor: pointer;
+      padding: 5px;
+      z-index: 1001;
+    }
+
+    .mobile-menu-toggle span {
+      width: 25px;
+      height: 3px;
+      background-color: #ffffff;
+      margin: 3px 0;
+      transition: all 0.3s ease;
+      border-radius: 2px;
+    }
+
+    .mobile-menu-toggle.active span:nth-child(1) {
+      transform: rotate(45deg) translate(8px, 8px);
+    }
+
+    .mobile-menu-toggle.active span:nth-child(2) {
+      opacity: 0;
+    }
+
+    .mobile-menu-toggle.active span:nth-child(3) {
+      transform: rotate(-45deg) translate(8px, -8px);
+    }
+
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: 60px;
+      left: 0;
+      right: 0;
+      background: rgba(0, 0, 0, 0.98);
+      backdrop-filter: blur(10px);
+      padding: 20px;
+      z-index: 999;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .mobile-menu.active {
+      display: block;
+    }
+
+    .mobile-menu a {
+      display: block;
+      color: #ffffff;
+      text-decoration: none;
+      padding: 15px 20px;
+      font-weight: 500;
+      font-size: 18px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      transition: all 0.3s ease;
+    }
+
+    .mobile-menu a:last-child {
+      border-bottom: none;
+    }
+
+    .mobile-menu a:hover {
+      color: #13ef96;
+      padding-left: 30px;
+    }
+
+    .mobile-menu .btn {
+      margin-top: 10px;
+      text-align: center;
+      display: block;
+      border-bottom: none;
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: auto;
+      padding: 50px 24px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Typography */
+    h1 {
+      font-size: 48px;
+      line-height: 1.2;
+      margin-bottom: 20px;
+      font-weight: 700;
+    }
+
+    h2 {
+      font-size: 30px;
+      margin-bottom: 20px;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    h3 {
+      font-size: 20px;
+      margin-bottom: 12px;
+      font-weight: 600;
+    }
+
+    p {
+      font-size: 18px;
+      color: rgba(255, 255, 255, 0.8);
+      line-height: 1.7;
+    }
+
+    /* Gradient Text */
+    .gradient-text {
+      background: linear-gradient(to right, rgb(29, 164, 24), rgb(206, 220, 93));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-weight: 700;
+    }
+
+    /* Badge */
+    .badge {
+      color: #13ef96;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+      display: inline-block;
+      font-size: 14px;
+    }
+
+    /* Buttons */
+    .btn {
+      background: #13ef96;
+      color: #000000;
+      padding: 12px 24px;
+      font-weight: 600;
+      border-radius: 6px;
+      text-decoration: none;
+      display: inline-block;
+      margin-top: 28px;
+      transition: all 0.3s ease;
+      border: 2px solid #16a34a;
+    }
+
+    .btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 25px #13e691;
+    }
+
+    /* Sections */
+    .section-light {
+      background: transparent;
+    }
+
+    .hero-section {
+      position: relative;
+      padding-top: 100px;
+      padding-bottom: 100px;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    /* Blur Effects */
+    .blur-circle-top {
+      position: absolute;
+      top: 100px;
+      right: -100px;
+      width: 250px;
+      height: 250px;
+      border-radius: 50%;
+      background: linear-gradient(to right, rgb(29, 164, 24), rgb(206, 220, 93));
+      opacity: 0.3;
+      filter: blur(100px);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Ensure content is above blur effects */
+    .container {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Grid Layouts */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 30px;
+      margin-top: 30px;
+    }
+
+    /* Cards */
+    .card {
+      background: #161616;
+      padding: 24px;
+      border-radius: 12px;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .card:hover {
+      box-shadow: 0 8px 16px rgba(19, 239, 150, 0.2);
+      transform: translateY(-4px);
+    }
+
+    /* Media */
+    img, video {
+      width: 100%;
+      border-radius: 12px;
+    }
+
+    svg {
+      width: 100%;
+      height: auto;
+    }
+
+    /* FAQ */
+    details {
+      background: #161616;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 14px;
+      cursor: pointer;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: all 0.3s ease;
+    }
+
+    details:hover {
+      border-color: #13ef96;
+    }
+
+    details[open] {
+      border-color: #13ef96;
+    }
+
+    summary {
+      font-size: 18px;
+      font-weight: 600;
+      list-style: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    summary::-webkit-details-marker {
+      display: none;
+    }
+
+    summary::after {
+      content: '+';
+      font-size: 24px;
+      color: #13ef96;
+      transition: transform 0.3s ease;
+    }
+
+    details[open] summary::after {
+      transform: rotate(45deg);
+    }
+
+    details p {
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .grid-2, .grid-3 {
+        grid-template-columns: 1fr;
+        gap: 30px;
+      }
+
+      h1 {
+        font-size: 32px;
+      }
+
+      h2 {
+        font-size: 24px;
+      }
+
+      p {
+        font-size: 16px;
+      }
+
+      .container {
+        padding: 40px 16px;
+      }
+
+      .hero-section {
+        padding-top: 80px;
+        padding-bottom: 60px;
+        min-height: 100vh;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .mobile-menu-toggle {
+        display: flex;
+      }
+
+      .blur-circle-top {
+        width: 200px;
+        height: 200px;
+      }
+
+      .card {
+        padding: 20px;
+      }
+
+      .badge {
+        font-size: 12px;
+      }
+
+      .btn {
+        padding: 10px 20px;
+        font-size: 14px;
+      }
+
+      .header {
+        padding: 12px 16px;
+      }
+
+      .logo {
+        height: 28px;
+      }
+
+      h3 {
+        font-size: 18px;
+      }
+
+      svg {
+        max-width: 100% !important;
+        height: auto !important;
+      }
+
+      svg text {
+        font-size: 12px !important;
+      }
+
+      svg text[font-size="32"] {
+        font-size: 18px !important;
+      }
+
+      svg text[font-size="24"] {
+        font-size: 16px !important;
+      }
+
+      svg text[font-size="20"] {
+        font-size: 14px !important;
+      }
+
+      svg text[font-size="36"] {
+        font-size: 20px !important;
+      }
+
+      svg text[font-size="48"] {
+        font-size: 24px !important;
+      }
+
+      video {
+        margin-top: 40px;
+      }
+    }
+
+    /* Footer */
+    .footer {
+      background: transparent;
+      padding: 30px 24px;
+      text-align: center;
+      border-top: none;
+    }
+
+    .footer-logo {
+      height: 32px;
+      width: auto;
+      margin: 0 auto 16px;
+      display: block;
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-content">
+    <img src="logo.png" alt="Profit First" class="logo">
+    <nav class="nav-links">
+      <a href="#features">Features</a>
+      <a href="#audit">Audit</a>
+      <a href="#faq">FAQ</a>
+      <a href="#audit" class="btn" style="margin-top: 0; padding: 8px 20px;">Get Started</a>
+    </nav>
+    <div class="mobile-menu-toggle" onclick="toggleMobileMenu()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </div>
+</header>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#features" onclick="toggleMobileMenu()">Features</a>
+  <a href="#audit" onclick="toggleMobileMenu()">Audit</a>
+  <a href="#faq" onclick="toggleMobileMenu()">FAQ</a>
+  <a href="#audit" class="btn" onclick="toggleMobileMenu()">Get Started</a>
+</div>
+
+<script>
+function toggleMobileMenu() {
+  const menu = document.getElementById('mobileMenu');
+  const toggle = document.querySelector('.mobile-menu-toggle');
+  menu.classList.toggle('active');
+  toggle.classList.toggle('active');
+}
+
+// Close menu when clicking outside
+document.addEventListener('click', function(event) {
+  const menu = document.getElementById('mobileMenu');
+  const toggle = document.querySelector('.mobile-menu-toggle');
+  const header = document.querySelector('.header');
+  
+  if (!header.contains(event.target) && !menu.contains(event.target)) {
+    menu.classList.remove('active');
+    toggle.classList.remove('active');
+  }
+});
+</script>
+
+<!-- HERO -->
+<section class="hero-section">
+  <div class="blur-circle-top"></div>
+  <div class="container grid-2">
+    <div>
+      <span class="badge">Shopify + Meta Ads + Shiprocket</span>
+      <h1>Most D2C Brands Think They Are Profitable.<br>Most Are Wrong.</h1>
+      <p>
+        ROAS looks good. Sales look healthy.<br>
+        But after ads, COD returns, shipping, and fees <span class="gradient-text">profit</span> disappears.
+      </p>
+      <p><strong>Profit First shows you the truth using your own data.</strong></p>
+      <a href="#audit" class="btn">Get Profit Leak Audit</a>
+    </div>
+
+    <!-- FOUNDER VIDEO SLOT -->
+    <div>
+      <!-- Replace with actual video embed -->
+      <video controls poster="founder-video-thumbnail.jpg">
+        <source src="founder-video.mp4" type="video/mp4">
+      </video>
+    </div>
+  </div>
+</section>
+
+<!-- INFOGRAPHIC 1 -->
+<section class="section-light">
+  <div class="container">
+    <h2>Why Your "<span class="gradient-text">Profit</span>" Is Fake</h2>
+    <p style="text-align: center; max-width: 672px; margin: 0 auto 30px; font-size: 18px;">Most brands stop at Shopify revenue. That's the mistake.</p>
+    <svg width="800" height="400" viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" style="max-width: 100%; width: 100%; height: auto; margin: 0 auto; display: block; border-radius: 12px;" preserveAspectRatio="xMidYMid meet">
+      <rect width="800" height="400" fill="#161616"/>
+      <text x="400" y="150" font-family="Arial" font-size="32" fill="#13ef96" text-anchor="middle" font-weight="bold">Why Your "Profit" Is Fake</text>
+      <rect x="100" y="200" width="250" height="150" fill="#1d1d1d" stroke="#13ef96" stroke-width="2" rx="8"/>
+      <text x="225" y="240" font-family="Arial" font-size="20" fill="#ffffff" text-anchor="middle">Shopify Revenue</text>
+      <text x="225" y="270" font-family="Arial" font-size="36" fill="#13ef96" text-anchor="middle" font-weight="bold">₹10L</text>
+      <text x="225" y="310" font-family="Arial" font-size="16" fill="#888888" text-anchor="middle">What you see</text>
+      
+      <text x="400" y="280" font-family="Arial" font-size="48" fill="#13ef96" text-anchor="middle">?</text>
+      
+      <rect x="450" y="200" width="250" height="150" fill="#1d1d1d" stroke="#ff4444" stroke-width="2" rx="8"/>
+      <text x="575" y="240" font-family="Arial" font-size="20" fill="#ffffff" text-anchor="middle">Real Profit</text>
+      <text x="575" y="270" font-family="Arial" font-size="36" fill="#ff4444" text-anchor="middle" font-weight="bold">₹1.5L</text>
+      <text x="575" y="310" font-family="Arial" font-size="16" fill="#888888" text-anchor="middle">After all costs</text>
+    </svg>
+  </div>
+</section>
+
+<!-- PAIN -->
+<section style="position: relative; overflow: hidden;">
+  <div class="container">
+    <h2>The Hidden <span class="gradient-text">Profit Killers</span></h2>
+    <div class="grid-3">
+      <div class="card">
+        <h3><span class="gradient-text">ROAS</span> Is Lying</h3>
+        <p>Meta ignores refunds, COD failures, and shipping losses.</p>
+      </div>
+      <div class="card">
+        <h3>COD Is Bleeding You</h3>
+        <p>High RTO and blocked cash flow kill margins silently.</p>
+      </div>
+      <div class="card">
+        <h3>No Single Truth</h3>
+        <p>Shopify, Meta, Shiprocket all show partial data.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT IT DOES -->
+<section id="features" class="section-light">
+  <div class="container">
+    <h2>What <span class="gradient-text">Profit First</span> Actually Does</h2>
+    <div class="grid-3">
+      <div class="card">
+        <h3>Real Net <span class="gradient-text">Profit</span></h3>
+        <p>After ads, shipping, COD returns, and gateways.</p>
+      </div>
+      <div class="card">
+        <h3><span class="gradient-text">Profit Leak</span> Detection</h3>
+        <p>See exactly where money is leaking.</p>
+      </div>
+      <div class="card">
+        <h3>AI Business Assistant</h3>
+        <p>Ask questions. Get answers from your own data.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- INFOGRAPHIC 2 -->
+<section>
+  <div class="container">
+    <h2>Before vs After <span class="gradient-text">Profit First</span></h2>
+    <svg width="800" height="400" viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" style="max-width: 100%; width: 100%; height: auto; margin: 0 auto; display: block; border-radius: 12px;" preserveAspectRatio="xMidYMid meet">
+      <rect width="800" height="400" fill="#161616"/>
+      <text x="400" y="60" font-family="Arial" font-size="32" fill="#13ef96" text-anchor="middle" font-weight="bold">Before vs After Profit First</text>
+      
+      <!-- Before Section -->
+      <rect x="50" y="100" width="320" height="250" fill="#1d1d1d" stroke="#ff4444" stroke-width="2" rx="8"/>
+      <text x="210" y="140" font-family="Arial" font-size="24" fill="#ff4444" text-anchor="middle" font-weight="bold">BEFORE</text>
+      <text x="210" y="180" font-family="Arial" font-size="16" fill="#ffffff" text-anchor="middle">  Confused about profit</text>
+      <text x="210" y="210" font-family="Arial" font-size="16" fill="#ffffff" text-anchor="middle">  Hidden costs</text>
+      <text x="210" y="240" font-family="Arial" font-size="16" fill="#ffffff" text-anchor="middle">  Guessing decisions</text>
+      <text x="210" y="270" font-family="Arial" font-size="16" fill="#ffffff" text-anchor="middle">  Cash flow issues</text>
+      <circle cx="210" cy="310" r="30" fill="#ff4444"/>
+      <text x="210" y="320" font-family="Arial" font-size="24" fill="#000000" text-anchor="middle" font-weight="bold">??</text>
+      
+      <!-- After Section -->
+      <rect x="430" y="100" width="320" height="250" fill="#1d1d1d" stroke="#13ef96" stroke-width="2" rx="8"/>
+      <text x="590" y="140" font-family="Arial" font-size="24" fill="#13ef96" text-anchor="middle" font-weight="bold">AFTER</text>
+      <text x="590" y="180" font-family="Arial" font-size="16" fill="#ffffff" text-anchor="middle">  Clear profit data</text>
+      <text x="590" y="210" font-family="Arial" font-size="16" fill="#ffffff" text-anchor="middle">  All costs tracked</text>
+      <text x="590" y="240" font-family="Arial" font-size="16" fill="#ffffff" text-anchor="middle">  Data-driven decisions</text>
+      <text x="590" y="270" font-family="Arial" font-size="16" fill="#ffffff" text-anchor="middle">  Optimized profit</text>
+      <circle cx="590" cy="310" r="30" fill="#13ef96"/>
+      <text x="590" y="320" font-family="Arial" font-size="24" fill="#000000" text-anchor="middle" font-weight="bold">??</text>
+    </svg>
+  </div>
+</section>
+
+<!-- AUDIT -->
+<section id="audit" class="section-light">
+  <div class="container">
+    <h2>Start With a <span class="gradient-text">Profit Leak Audit</span></h2>
+    <p style="text-align: center; max-width: 672px; margin: 0 auto 40px;">In under 10 minutes, we show:</p>
+    <div class="grid-3">
+      <div class="card">
+        <h3>Are you actually <span class="gradient-text">profitable</span>?</h3>
+      </div>
+      <div class="card">
+        <h3>Which SKUs lose money?</h3>
+      </div>
+      <div class="card">
+        <h3>How much ads & COD are costing you?</h3>
+      </div>
+    </div>
+    <p style="text-align: center; margin-top: 40px;"><strong style="font-size: 24px; color: #13ef96;">One-time audit: ₹1,999</strong></p>
+    <div style="text-align: center;">
+      <a href="#" class="btn">Book My Audit</a>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="container">
+    <h2>Frequently Asked <span class="gradient-text">Questions</span></h2>
+
+    <div style="max-width: 800px; margin: 0 auto;">
+      <details>
+        <summary>Is Profit First only for Shiprocket users?</summary>
+        <p>Yes. Today we integrate deeply with Shiprocket to give accurate COD, RTO, and shipping costs.</p>
+      </details>
+
+      <details>
+        <summary>How is this different from Shopify or Meta dashboards?</summary>
+        <p>They show partial data. Profit First shows real net profit after all costs.</p>
+      </details>
+
+      <details>
+        <summary>Will this change my ads automatically?</summary>
+        <p>No. Today we show what to fix and why. AI execution is rolling out to Scale users.</p>
+      </details>
+
+      <details>
+        <summary>Is my data safe?</summary>
+        <p>Yes. Read-only access. We never modify your store or ad accounts.</p>
+      </details>
+
+      <details>
+        <summary>Can I cancel anytime?</summary>
+        <p>Yes. Monthly plans. No lock-in.</p>
+      </details>
+    </div>
+
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="section-light">
+  <div class="container" style="text-align: center;">
+    <h2>Stop Guessing. Start Running a <span class="gradient-text">Profitable</span> Brand.</h2>
+    <a href="#audit" class="btn">Get My Profit Leak Audit</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <img src="logo.png" alt="Profit First" class="footer-logo">
+  <p style="margin-top: 16px; font-size: 14px;"> 2025 Profit First Analytics. All rights reserved.</p>
+  <p style="margin-top: 8px; font-size: 14px;">Know how much you <span class="gradient-text">spent</span> & how much <span class="gradient-text">profit</span> you'll make</p>
+</footer>
+
+</body>
+</html>
